@@ -16,13 +16,14 @@
 package com.caresyntax.studyscheduler.web.controller;
 
 import com.caresyntax.studyscheduler.model.Patient;
-import com.caresyntax.studyscheduler.owner.PatientRepository;
+import com.caresyntax.studyscheduler.dao.PatientRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,20 +33,17 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
- * @author Michael Isvy
+ * @author Mihail Adamenko
  */
 @Controller
 class PatientController {
 
-    private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
-    private final PatientRepository owners;
+    private static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patients/createOrUpdatePatientForm";
+    private final PatientRepository patientRepository;
 
 
-    public PatientController(PatientRepository clinicService) {
-        this.owners = clinicService;
+    public PatientController(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
     }
 
     @InitBinder
@@ -53,82 +51,87 @@ class PatientController {
         dataBinder.setDisallowedFields("id");
     }
 
-    @GetMapping("/owners/new")
+    @ModelAttribute("sexes")
+    public  Patient.SEX[] populateSexes() {
+        return Patient.SEX.values();
+    }
+
+    @GetMapping("/patients/new")
     public String initCreationForm(Map<String, Object> model) {
         Patient patient = new Patient();
-        model.put("owner", patient);
-        return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+        model.put("patient", patient);
+        return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
-    @PostMapping("/owners/new")
+    @PostMapping("/patients/new")
     public String processCreationForm(@Valid Patient patient, BindingResult result) {
         if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+            return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
-            this.owners.save(patient);
-            return "redirect:/owners/" + patient.getId();
+            this.patientRepository.save(patient);
+            return "redirect:/patients/" + patient.getId();
         }
     }
 
-    @GetMapping("/owners/find")
+    @GetMapping("/")
     public String initFindForm(Map<String, Object> model) {
-        model.put("owner", new Patient());
-        return "owners/findOwners";
+        model.put("patient", new Patient());
+        return "patients/findPatients";
     }
 
-    @GetMapping("/owners")
+    @GetMapping("/patients")
     public String processFindForm(Patient patient, BindingResult result, Map<String, Object> model) {
 
-        // allow parameterless GET request for /owners to return all records
-        if (patient.getLastName() == null) {
-            patient.setLastName(""); // empty string signifies broadest possible search
+        // allow parameterless GET request for /patients to return all records
+        if (patient.getName() == null) {
+            patient.setName(""); // empty string signifies broadest possible search
         }
 
-        // find owners by last name
-        Collection<Patient> results = this.owners.findByLastName(patient.getLastName());
+        // find patients by name
+        Collection<Patient> results = patientRepository.findByName(patient.getName());
         if (results.isEmpty()) {
-            // no owners found
-            result.rejectValue("lastName", "notFound", "not found");
-            return "owners/findOwners";
+            // no patients found
+            result.rejectValue("name", "notFound", "not found");
+            return "patients/findPatients";
         } else if (results.size() == 1) {
             // 1 patient found
             patient = results.iterator().next();
-            return "redirect:/owners/" + patient.getId();
+            return "redirect:/patients/" + patient.getId();
         } else {
-            // multiple owners found
+            // multiple patients found
             model.put("selections", results);
-            return "owners/ownersList";
+            return "patients/patientsList";
         }
     }
 
-    @GetMapping("/owners/{ownerId}/edit")
-    public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
-        Patient patient = this.owners.findById(ownerId);
+    @GetMapping("/patients/{patientId}/edit")
+    public String initUpdatePatientForm(@PathVariable("patientId") int patientId, Model model) {
+        Patient patient = this.patientRepository.findById(patientId);
         model.addAttribute(patient);
-        return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+        return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
-    @PostMapping("/owners/{ownerId}/edit")
-    public String processUpdateOwnerForm(@Valid Patient patient, BindingResult result, @PathVariable("ownerId") int ownerId) {
+    @PostMapping("/patients/{patientId}/edit")
+    public String processUpdatePatientForm(@Valid Patient patient, BindingResult result, @PathVariable("patientId") int patientId) {
         if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
+            return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
-            patient.setId(ownerId);
-            this.owners.save(patient);
-            return "redirect:/owners/{ownerId}";
+            patient.setId(patientId);
+            this.patientRepository.save(patient);
+            return "redirect:/patients/{patientId}";
         }
     }
 
     /**
-     * Custom handler for displaying an owner.
+     * Custom handler for displaying an patient.
      *
-     * @param ownerId the ID of the owner to display
+     * @param patientId the ID of the patient to display
      * @return a ModelMap with the model attributes for the view
      */
-    @GetMapping("/owners/{ownerId}")
-    public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
-        ModelAndView mav = new ModelAndView("owners/ownerDetails");
-        mav.addObject(this.owners.findById(ownerId));
+    @GetMapping("/patients/{patientId}")
+    public ModelAndView showPatient(@PathVariable("patientId") int patientId) {
+        ModelAndView mav = new ModelAndView("patients/patientDetails");
+        mav.addObject(this.patientRepository.findById(patientId));
         return mav;
     }
 

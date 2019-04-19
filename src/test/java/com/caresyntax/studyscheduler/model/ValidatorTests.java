@@ -30,8 +30,10 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
+ * Simple test to make sure that Bean Validation is working (useful
  * when upgrading to a new version of Hibernate Validator/ Bean Validation)
+ *
+ * @author Mihail Adamenko
  */
 public class ValidatorTests {
 
@@ -42,20 +44,18 @@ public class ValidatorTests {
     }
 
     @Test
-    public void shouldNotValidateWhenFirstNameEmpty() {
+    public void shouldNotValidateWhenNameEmpty() {
 
         LocaleContextHolder.setLocale(Locale.ENGLISH);
-        Person person = new Person();
-        person.setFirstName("");
-        person.setLastName("smith");
+        Doctor doctor = new Doctor();
+        doctor.setName("");
 
         Validator validator = createValidator();
-        Set<ConstraintViolation<Person>> constraintViolations = validator
-                .validate(person);
+        Set<ConstraintViolation<Doctor>> constraintViolations = validator
+                .validate(doctor);
 
         assertThat(constraintViolations.size()).isEqualTo(1);
-        ConstraintViolation<Person> violation = constraintViolations.iterator().next();
-        assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
+        ConstraintViolation<Doctor> violation = constraintViolations.iterator().next();
         assertThat(violation.getMessage()).isEqualTo("must not be empty");
     }
 

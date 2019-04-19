@@ -13,35 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.caresyntax.studyscheduler.vet;
+package com.caresyntax.studyscheduler.dao;
 
-import java.util.Collection;
-
-import org.springframework.cache.annotation.Cacheable;
+import com.caresyntax.studyscheduler.model.Study;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.repository.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
- * Repository class for <code>Vet</code> domain objects All method names are compliant with Spring Data naming
+ * Repository class for <code>Study</code> domain objects All method names are compliant with Spring Data naming
  * conventions so this interface can easily be extended for Spring Data.
  * See: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
  *
- * @author Ken Krebs
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @author Michael Isvy
+ * @author Mihail Adamenko
  */
-public interface VetRepository extends Repository<Vet, Integer> {
+public interface StudyRepository extends Repository<Study, Integer> {
+
 
     /**
-     * Retrieve all <code>Vet</code>s from the data store.
+     * Save a <code>Study</code> to the data store, either inserting or updating it.
      *
-     * @return a <code>Collection</code> of <code>Vet</code>s
+     * @param study the <code>Study</code> to save
+     * @see com.caresyntax.studyscheduler.model.BaseEntity#isNew
      */
-    @Transactional(readOnly = true)
-    @Cacheable("vets")
-    Collection<Vet> findAll() throws DataAccessException;
+    void save(Study study) throws DataAccessException;
+
+    List<Study> findByPatientId(Integer patientId);
 
 
 }

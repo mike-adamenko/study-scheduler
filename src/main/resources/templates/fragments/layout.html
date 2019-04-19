@@ -10,14 +10,14 @@
 
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/resources/images/favicon.png}">
 
-    <title>PetClinic :: a Spring Framework demonstration</title>
+    <title>Procedure scheduling web app</title>
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link rel="stylesheet" th:href="@{/resources/css/petclinic.css}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/studyscheduler.css}"/>
 
   </head>
 
@@ -25,15 +25,6 @@
 
   <nav class="navbar navbar-default" role="navigation">
       <div class="container">
-          <div class="navbar-header">
-              <a class="navbar-brand" th:href="@{/}"><span></span></a>
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-                  <span class="sr-only"><os-p>Toggle navigation</os-p></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-          </div>
           <div class="navbar-collapse collapse" id="main-navbar">
               <ul class="nav navbar-nav navbar-right">
   
@@ -44,26 +35,16 @@
                       </a>
                   </li>
   
-                  <li th:replace="::menuItem ('/','home','home page','home','Home')">
-                      <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                      <span>Home</span>
-                  </li>
-  
-                  <li th:replace="::menuItem ('/patients/find','patients','find patients','search','Find patients')">
+                  <li th:replace="::menuItem ('/','patients','patients','search','Patients')">
                       <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                      <span>Find patients</span>
+                      <span>Patients</span>
                   </li>
   
-                  <li th:replace="::menuItem ('/vets.html','vets','veterinarians','th-list','Veterinarians')">
+                  <li th:replace="::menuItem ('/procedures.html','procedures','procedures','th-list','Procedures')">
                       <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                      <span>Veterinarians</span>
+                      <span>Procedures</span>
                   </li>
-  
-                  <li th:replace="::menuItem ('/oups','error','trigger a RuntimeException to see how it is handled','warning-sign','Error')">
-                      <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-                      <span>Error</span>
-                  </li>
-  
+
               </ul>
           </div>
       </div>
@@ -72,16 +53,6 @@
       <div class="container xd-container">
   
           <th:block th:include="${template}"/>
-
-        <br/>
-        <br/>
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center">
-              <img src="../static/resources/images/spring-pivotal-logo.png" th:src="@{/resources/images/spring-pivotal-logo.png}"
-                alt="Sponsored by Pivotal"/></div>
-          </div>
-        </div>
       </div>
   </div>
 

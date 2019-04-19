@@ -15,6 +15,8 @@
  */
 package com.caresyntax.studyscheduler.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -47,6 +49,7 @@ public class Study extends BaseEntity {
     private STATUS status;
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime startTime;
 
     @Column

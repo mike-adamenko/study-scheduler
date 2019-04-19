@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'patients')}">
+
+  <body>
+
+    <h2>Patients</h2>
+
+    <table id="patients" class="table table-striped">
+        <thead>
+        <tr>
+            <th style="width: 150px;">Name</th>
+            <th style="width: 200px;">Sex</th>
+            <th>Birth Date</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr th:each="patient : ${selections}">
+              <td>
+                  <a th:href="@{/patients/__${patient.id}__}" th:text="${patient.name}"/></a>
+              </td>
+              <td th:text="${patient.sex}"/>
+              <td th:text="${patient.birthDate}"/>
+          </tr>
+        </tbody>
+    </table>
+
+  </body>
+</html>

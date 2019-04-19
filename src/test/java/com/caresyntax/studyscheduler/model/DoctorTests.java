@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.caresyntax.studyscheduler.vet;
+package com.caresyntax.studyscheduler.model;
 
+import com.caresyntax.studyscheduler.model.Doctor;
 import org.junit.Test;
-
 import org.springframework.util.SerializationUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * @author Dave Syer
+ * @author Mihail Adamenko
  *
  */
-public class VetTests {
+public class DoctorTests {
 
     @Test
     public void testSerialization() {
-        Vet vet = new Vet();
-        vet.setFirstName("Zaphod");
-        vet.setLastName("Beeblebrox");
-        vet.setId(123);
-        Vet other = (Vet) SerializationUtils
-                .deserialize(SerializationUtils.serialize(vet));
-        assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
-        assertThat(other.getLastName()).isEqualTo(vet.getLastName());
-        assertThat(other.getId()).isEqualTo(vet.getId());
+        Doctor doctor = new Doctor();
+        doctor.setName("Zaphod Beeblebrox");
+        doctor.setId(123);
+        Doctor other = (Doctor) SerializationUtils
+                .deserialize(SerializationUtils.serialize(doctor));
+        assertThat(other.getName()).isEqualTo(doctor.getName());
+        assertThat(other.getId()).isEqualTo(doctor.getId());
     }
 
 }

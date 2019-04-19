@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.caresyntax.studyscheduler.owner;
+package com.caresyntax.studyscheduler.dao;
 
 import java.util.Collection;
 
@@ -33,13 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PatientRepository extends Repository<Patient, Integer> {
 
     /**
-     * Retrieve {@link Patient}s from the data store by last name, returning all owners
+     * Retrieve {@link Patient}s from the data store by last name, returning all patients
      * whose last name <i>starts</i> with the given name.
      * @param name Value to search for
      * @return a Collection of matching {@link Patient}s (or an empty Collection if none
      * found)
      */
-    @Query("SELECT DISTINCT patient FROM Patient patient WHERE patient.name LIKE :name%")
+    @Query("SELECT DISTINCT patient FROM Patient patient WHERE lower(patient.name) LIKE lower('%' || :name || '%')")
     @Transactional(readOnly = true)
     Collection<Patient> findByName(@Param("name") String name);
 

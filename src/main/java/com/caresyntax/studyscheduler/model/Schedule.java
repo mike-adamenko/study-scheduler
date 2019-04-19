@@ -15,36 +15,44 @@
  */
 package com.caresyntax.studyscheduler.model;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotEmpty;
-
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
- * Simple JavaBean domain object adds a name property to <code>BaseEntity</code>. Used as a base class for objects
- * needing these properties.
+ * Simple JavaBean domain object representing a schedule.
  *
  * @author Ken Krebs
  * @author Juergen Hoeller
+ * @author Sam Brannen
+ * @author Arjen Poutsma
  */
-@MappedSuperclass
-public class NamedEntity extends BaseEntity {
+@Entity
+public class Schedule extends NamedEntity {
 
-    @Column(name = "name", nullable = false)
-    @NotEmpty
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-    public String getName() {
-        return this.name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "study_id")
+    private Doctor study;
 
     @Override
     public String toString() {
-        return this.getName();
+        return "Schedule{" +
+            "doctor=" + doctor +
+            ", room=" + room +
+            ", patient=" + patient +
+            ", study=" + study +
+            '}';
     }
-
 }

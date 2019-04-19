@@ -15,6 +15,8 @@
  */
 package com.caresyntax.studyscheduler.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,17 +34,19 @@ import java.util.List;
 @Table
 public class Patient extends NamedEntity {
 
-    enum SEX {
+    public static enum SEX {
         unknown, male, female
     }
     @Column
     private SEX sex;
 
+
     @Column
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-    private List<Study> studies;
+    private List<Schedule> schedules;
 
     public SEX getSex() {
         return sex;
@@ -60,11 +64,20 @@ public class Patient extends NamedEntity {
         this.birthDate = birthDate;
     }
 
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
             "sex=" + sex +
             ", birthDate=" + birthDate +
+            ", schedules=" + schedules +
             '}';
     }
 }
