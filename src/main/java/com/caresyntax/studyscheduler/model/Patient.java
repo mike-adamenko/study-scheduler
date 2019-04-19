@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ import java.util.List;
 @Table
 public class Patient extends NamedEntity {
 
-    public static enum SEX {
+    public enum SEX {
         unknown, male, female
     }
     @Column
@@ -45,8 +46,8 @@ public class Patient extends NamedEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-    private List<Schedule> schedules;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", fetch = FetchType.EAGER)
+    private List<Study> studies;
 
     public SEX getSex() {
         return sex;
@@ -64,12 +65,12 @@ public class Patient extends NamedEntity {
         this.birthDate = birthDate;
     }
 
-    public List<Schedule> getSchedules() {
-        return schedules;
+    public List<Study> getStudies() {
+        return studies;
     }
 
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setStudies(List<Study> studies) {
+        this.studies = studies;
     }
 
     @Override
@@ -77,7 +78,6 @@ public class Patient extends NamedEntity {
         return "Patient{" +
             "sex=" + sex +
             ", birthDate=" + birthDate +
-            ", schedules=" + schedules +
             '}';
     }
 }

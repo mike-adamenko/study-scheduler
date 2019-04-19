@@ -26,29 +26,32 @@
   
     <a th:href="@{{id}/edit(id=${patient.id})}" class="btn btn-default">Edit
       Patient</a>
-    <a th:href="@{{id}/pets/new(id=${patient.id})}" class="btn btn-default">Add
-      schedule</a>
+    <a th:href="@{{id}/study/new(id=${patient.id})}" class="btn btn-default">Add
+      study</a>
   
     <br />
     <br />
     <br />
-    <h2>Schedules</h2>
+    <h2>Studies</h2>
   
     <table class="table table-striped">
 
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
             <th>Description</th>
+            <th>Doctor</th>
+            <th>Room</th>
+            <th>Start Time</th>
+            <th>End Time</th>
         </tr>
         </thead>
-        <tr th:each="schedule : ${patient.schedules}">
-            <td th:text="${schedule.name}"></td>
-            <td th:text="${#temporals.format(schedule.study.startDate, 'yyyy-MM-dd')}"></td>
-            <td th:text="${#temporals.format(schedule.study.endDate, 'yyyy-MM-dd')}"></td>
-            <td th:text="${schedule.study?.description}"></td>
+        <tr th:each="study : ${patient.studies}">
+            <td th:text="${study.description}"></td>
+            <td th:text="${study.doctor}"></td>
+            <td th:text="${study.room}"></td>
+            <td th:text="${#temporals.format(study.startTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(study.endTime, 'yyyy-MM-dd HH:mm')}"></td>
+
         </tr>
     </table>
   

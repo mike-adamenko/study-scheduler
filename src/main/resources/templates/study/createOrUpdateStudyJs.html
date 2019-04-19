@@ -1,0 +1,11 @@
+<script type="application/javascript">
+    $(function () {
+
+        $('#startDateTime, #endDateTime').datetimepicker({
+            autoclose: true,
+            forceParse: 0
+        });
+
+        $( '#startDateTime, #endDateTime' ).val(new Date());
+    });
+</script>

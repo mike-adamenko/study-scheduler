@@ -27,26 +27,16 @@ CREATE TABLE study (
   description       VARCHAR(300),
   status TINYINT,
   start_time DATETIME,
-  end_time DATETIME
-);
-
-CREATE TABLE schedule (
-  id        INTEGER IDENTITY PRIMARY KEY,
-  name      VARCHAR(30),
+  end_time DATETIME,
   doctor_id      INTEGER,
-  room_id      INTEGER,
-  patient_id      INTEGER,
-  study_id       INTEGER
+  room_id      INTEGER
 );
 
 ALTER TABLE study
   ADD CONSTRAINT fk_study_patient FOREIGN KEY (patient_id) REFERENCES patient (id);
-ALTER TABLE schedule
-  ADD CONSTRAINT fk_schedule_doctor FOREIGN KEY (doctor_id) REFERENCES doctor (id);
-ALTER TABLE schedule
-  ADD CONSTRAINT fk_schedule_room FOREIGN KEY (room_id) REFERENCES room (id);
-ALTER TABLE schedule
-  ADD CONSTRAINT fk_schedule_patient FOREIGN KEY (patient_id) REFERENCES patient (id);
-ALTER TABLE schedule
-  ADD CONSTRAINT fk_schedule_study FOREIGN KEY (study_id) REFERENCES study (id);
+ALTER TABLE study
+  ADD CONSTRAINT fk_study_doctor FOREIGN KEY (doctor_id) REFERENCES doctor (id);
+ALTER TABLE study
+  ADD CONSTRAINT fk_study_room FOREIGN KEY (room_id) REFERENCES room (id);
+
 

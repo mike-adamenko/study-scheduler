@@ -17,7 +17,7 @@
         <tbody>
           <tr th:each="patient : ${selections}">
               <td>
-                  <a th:href="@{/patients/__${patient.id}__}" th:text="${patient.name}"/></a>
+                  <a th:href="@{/patient/__${patient.id}__}" th:text="${patient.name}"/></a>
               </td>
               <td th:text="${patient.sex}"/>
               <td th:text="${patient.birthDate}"/>

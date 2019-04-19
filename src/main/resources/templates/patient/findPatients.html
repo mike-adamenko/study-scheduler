@@ -5,7 +5,7 @@
 
   <h2>Find patients</h2>
 
-  <form th:object="${patient}" th:action="@{/patients}" method="get"
+  <form th:object="${patient}" th:action="@{/patient}" method="get"
     class="form-horizontal" id="search-patient-form">
     <div class="form-group">
       <div class="control-group" id="nameGroup">
@@ -29,7 +29,7 @@
   </form>
 
   <br />
-  <a class="btn btn-default" th:href="@{/patients/new}">Add Patient</a>
+  <a class="btn btn-default" th:href="@{/patient/new}">Add Patient</a>
 
 </body>
 </html>

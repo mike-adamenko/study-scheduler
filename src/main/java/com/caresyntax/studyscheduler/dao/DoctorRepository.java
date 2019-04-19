@@ -15,10 +15,9 @@
  */
 package com.caresyntax.studyscheduler.dao;
 
-import com.caresyntax.studyscheduler.model.Study;
-import org.springframework.dao.DataAccessException;
+import com.caresyntax.studyscheduler.model.Doctor;
+import com.caresyntax.studyscheduler.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
@@ -29,9 +28,6 @@ import java.util.List;
  *
  * @author Mihail Adamenko
  */
-public interface StudyRepository extends JpaRepository<Study, Integer> {
-
-   List<Study> findByPatientId(Integer patientId);
-
+public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
 }

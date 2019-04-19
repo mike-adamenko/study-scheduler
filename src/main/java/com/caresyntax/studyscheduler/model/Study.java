@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @Table
 public class Study extends BaseEntity {
 
-    enum STATUS {
+    public enum STATUS {
         planned, inprogress, finished
     }
 
@@ -49,11 +49,21 @@ public class Study extends BaseEntity {
     private STATUS status;
 
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startTime;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
 
     public Patient getPatient() {
         return patient;
@@ -95,6 +105,22 @@ public class Study extends BaseEntity {
         this.endTime = endTime;
     }
 
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
     @Override
     public String toString() {
         return "Study{" +
@@ -103,6 +129,8 @@ public class Study extends BaseEntity {
             ", status=" + status +
             ", startTime=" + startTime +
             ", endTime=" + endTime +
+            ", doctor=" + doctor +
+            ", room=" + room +
             '}';
     }
 }

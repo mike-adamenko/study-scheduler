@@ -38,7 +38,7 @@ import java.util.Map;
 @Controller
 class PatientController {
 
-    private static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patients/createOrUpdatePatientForm";
+    private static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patient/createOrUpdatePatientForm";
     private final PatientRepository patientRepository;
 
 
@@ -56,69 +56,69 @@ class PatientController {
         return Patient.SEX.values();
     }
 
-    @GetMapping("/patients/new")
+    @GetMapping("/patient/new")
     public String initCreationForm(Map<String, Object> model) {
         Patient patient = new Patient();
         model.put("patient", patient);
         return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
-    @PostMapping("/patients/new")
+    @PostMapping("/patient/new")
     public String processCreationForm(@Valid Patient patient, BindingResult result) {
         if (result.hasErrors()) {
             return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
             this.patientRepository.save(patient);
-            return "redirect:/patients/" + patient.getId();
+            return "redirect:/patient/" + patient.getId();
         }
     }
 
     @GetMapping("/")
     public String initFindForm(Map<String, Object> model) {
         model.put("patient", new Patient());
-        return "patients/findPatients";
+        return "patient/findPatients";
     }
 
-    @GetMapping("/patients")
+    @GetMapping("/patient")
     public String processFindForm(Patient patient, BindingResult result, Map<String, Object> model) {
 
-        // allow parameterless GET request for /patients to return all records
+        // allow parameterless GET request for /patient to return all records
         if (patient.getName() == null) {
             patient.setName(""); // empty string signifies broadest possible search
         }
 
-        // find patients by name
+        // find patient by name
         Collection<Patient> results = patientRepository.findByName(patient.getName());
         if (results.isEmpty()) {
-            // no patients found
+            // no patient found
             result.rejectValue("name", "notFound", "not found");
-            return "patients/findPatients";
+            return "patient/findPatients";
         } else if (results.size() == 1) {
             // 1 patient found
             patient = results.iterator().next();
-            return "redirect:/patients/" + patient.getId();
+            return "redirect:/patient/" + patient.getId();
         } else {
-            // multiple patients found
+            // multiple patient found
             model.put("selections", results);
-            return "patients/patientsList";
+            return "patient/patientList";
         }
     }
 
-    @GetMapping("/patients/{patientId}/edit")
+    @GetMapping("/patient/{patientId}/edit")
     public String initUpdatePatientForm(@PathVariable("patientId") int patientId, Model model) {
-        Patient patient = this.patientRepository.findById(patientId);
+        Patient patient = this.patientRepository.findById(patientId).get();
         model.addAttribute(patient);
         return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
-    @PostMapping("/patients/{patientId}/edit")
+    @PostMapping("/patient/{patientId}/edit")
     public String processUpdatePatientForm(@Valid Patient patient, BindingResult result, @PathVariable("patientId") int patientId) {
         if (result.hasErrors()) {
             return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
             patient.setId(patientId);
             this.patientRepository.save(patient);
-            return "redirect:/patients/{patientId}";
+            return "redirect:/patient/{patientId}";
         }
     }
 
@@ -128,10 +128,10 @@ class PatientController {
      * @param patientId the ID of the patient to display
      * @return a ModelMap with the model attributes for the view
      */
-    @GetMapping("/patients/{patientId}")
+    @GetMapping("/patient/{patientId}")
     public ModelAndView showPatient(@PathVariable("patientId") int patientId) {
-        ModelAndView mav = new ModelAndView("patients/patientDetails");
-        mav.addObject(this.patientRepository.findById(patientId));
+        ModelAndView mav = new ModelAndView("patient/patientDetails");
+        mav.addObject(this.patientRepository.findById(patientId).get());
         return mav;
     }
 

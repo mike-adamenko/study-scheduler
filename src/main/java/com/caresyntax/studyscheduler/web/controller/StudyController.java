@@ -15,10 +15,13 @@
  */
 package com.caresyntax.studyscheduler.web.controller;
 
+import com.caresyntax.studyscheduler.dao.DoctorRepository;
 import com.caresyntax.studyscheduler.dao.PatientRepository;
+import com.caresyntax.studyscheduler.dao.RoomRepository;
 import com.caresyntax.studyscheduler.dao.StudyRepository;
+import com.caresyntax.studyscheduler.model.Doctor;
 import com.caresyntax.studyscheduler.model.Patient;
-import com.caresyntax.studyscheduler.model.Schedule;
+import com.caresyntax.studyscheduler.model.Room;
 import com.caresyntax.studyscheduler.model.Study;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -38,13 +42,17 @@ import java.util.Map;
 @Controller
 class StudyController {
 
-    private final StudyRepository studyRepository;
     private final PatientRepository patientRepository;
+    private final StudyRepository studyRepository;
+    private final RoomRepository roomRepository;
+    private final DoctorRepository doctorRepository;
 
 
-    public StudyController(StudyRepository studyRepository, PatientRepository patientRepository) {
+    public StudyController(PatientRepository patientRepository, StudyRepository studyRepository, RoomRepository roomRepository, DoctorRepository doctorRepository) {
         this.patientRepository = patientRepository;
         this.studyRepository = studyRepository;
+        this.roomRepository = roomRepository;
+        this.doctorRepository = doctorRepository;
     }
 
     @InitBinder
@@ -62,29 +70,40 @@ class StudyController {
      * @param patientId
      * @return Patient
      */
-    @ModelAttribute("Schedule")
-    public Schedule loadPatientWithSchedules(@PathVariable("patientId") int patientId, Map<String, Object> model) {
-        Patient patient = patientRepository.findById(patientId);
+    @ModelAttribute("study")
+    public Study loadPatientWithStudys(@PathVariable("patientId") int patientId, Map<String, Object> model) {
+        Patient patient = patientRepository.findById(patientId).get();
+        Study study = new Study();
+        study.setPatient(patient);
+        patient.getStudies().add(study);
         model.put("patient", patient);
-        Schedule schedule = new Schedule();
-        patient.getSchedules().add(schedule);
-        return schedule;
+        return study;
+    }
+
+    @ModelAttribute("rooms")
+    public Collection<Room> populateRooms() {
+        return this.roomRepository.findAll();
+    }
+
+    @ModelAttribute("doctors")
+    public Collection<Doctor> populateDoctors() {
+        return this.doctorRepository.findAll();
     }
 
     // Spring MVC calls method loadPatientWithStudy(...) before initNewStudyForm is called
-    @GetMapping("/patients/*/patients/{patientId}/studies/new")
+    @GetMapping("/patient/{patientId}/study/new")
     public String initNewStudyForm(@PathVariable("patientId") int patientId, Map<String, Object> model) {
-        return "patients/createOrUpdateStudyForm";
+        return "study/createOrUpdateStudyForm";
     }
 
     // Spring MVC calls method loadPatientWithStudy(...) before processNewStudyForm is called
-    @PostMapping("/patients/{patientId}/patients/{patientId}/studies/new")
-    public String processNewStudyForm(@Valid Study Study, BindingResult result) {
+    @PostMapping("/patient/{patientId}/study/new")
+    public String processNewStudyForm(@Valid Study study, BindingResult result) {
         if (result.hasErrors()) {
-            return "patients/createOrUpdateStudyForm";
+            return "study/createOrUpdateStudyForm";
         } else {
-            this.studyRepository.save(Study);
-            return "redirect:/patients/{patientId}";
+            this.studyRepository.save(study);
+            return "redirect:/patient/{patientId}";
         }
     }
 

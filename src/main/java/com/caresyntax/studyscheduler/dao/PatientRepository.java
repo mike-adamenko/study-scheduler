@@ -18,6 +18,7 @@ package com.caresyntax.studyscheduler.dao;
 import java.util.Collection;
 
 import com.caresyntax.studyscheduler.model.Patient;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -30,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Mihail Adamenko
  */
-public interface PatientRepository extends Repository<Patient, Integer> {
+public interface PatientRepository extends JpaRepository<Patient, Integer> {
 
     /**
      * Retrieve {@link Patient}s from the data store by last name, returning all patients
@@ -42,21 +43,5 @@ public interface PatientRepository extends Repository<Patient, Integer> {
     @Query("SELECT DISTINCT patient FROM Patient patient WHERE lower(patient.name) LIKE lower('%' || :name || '%')")
     @Transactional(readOnly = true)
     Collection<Patient> findByName(@Param("name") String name);
-
-    /**
-     * Retrieve an {@link Patient} from the data store by id.
-     * @param id the id to search for
-     * @return the {@link Patient} if found
-     */
-    @Query("SELECT patient FROM Patient patient WHERE patient.id =:id")
-    @Transactional(readOnly = true)
-    Patient findById(@Param("id") Integer id);
-
-    /**
-     * Save an {@link Patient} to the data store, either inserting or updating it.
-     * @param patient the {@link Patient} to save
-     */
-    void save(Patient patient);
-
 
 }
