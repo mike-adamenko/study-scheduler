@@ -70,15 +70,15 @@ class StudyController {
      * @param patientId
      * @return Patient
      */
-    @ModelAttribute("study")
-    public Study loadPatientWithStudys(@PathVariable("patientId") int patientId, Map<String, Object> model) {
-        Patient patient = patientRepository.findById(patientId).get();
-        Study study = new Study();
-        study.setPatient(patient);
-        patient.getStudies().add(study);
-        model.put("patient", patient);
-        return study;
-    }
+//    @ModelAttribute("study")
+//    public Study loadPatientWithStudys(@PathVariable("patientId") int patientId, Map<String, Object> model) {
+//        Patient patient = patientRepository.findById(patientId).get();
+//        Study study = new Study();
+//        study.setPatient(patient);
+//        patient.getStudies().add(study);
+//        model.put("patient", patient);
+//        return study;
+//    }
 
     @ModelAttribute("rooms")
     public Collection<Room> populateRooms() {
@@ -90,9 +90,19 @@ class StudyController {
         return this.doctorRepository.findAll();
     }
 
-    // Spring MVC calls method loadPatientWithStudy(...) before initNewStudyForm is called
     @GetMapping("/patient/{patientId}/study/new")
     public String initNewStudyForm(@PathVariable("patientId") int patientId, Map<String, Object> model) {
+        Patient patient = patientRepository.findById(patientId).get();
+        Study study = new Study();
+        study.setPatient(patient);
+        patient.getStudies().add(study);
+        model.put("patient", patient);
+        model.put("study", study);
+        return "study/createOrUpdateStudyForm";
+    }
+
+    @GetMapping("/study/{studyId}/edit")
+    public String initUpdateStudyForm(@PathVariable("studyId") int studyId, Map<String, Object> model) {
         return "study/createOrUpdateStudyForm";
     }
 

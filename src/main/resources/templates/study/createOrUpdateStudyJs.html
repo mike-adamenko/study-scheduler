@@ -1,11 +1,13 @@
 <script type="application/javascript">
     $(function () {
+        // var dd = moment(new Date(), "DD/MM/YYYY HH:mm");
 
-        $('#startDateTime, #endDateTime').datetimepicker({
+        $('#startTime, #endTime').datetimepicker({
             autoclose: true,
-            forceParse: 0
+            forceParse: 0,
+            useCurrent: true
         });
 
-        $( '#startDateTime, #endDateTime' ).val(new Date());
+        // $( '#startTime, #endTime' ).val(dd);
     });
 </script>

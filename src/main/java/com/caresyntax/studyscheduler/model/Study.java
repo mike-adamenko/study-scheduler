@@ -22,6 +22,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -43,6 +45,7 @@ public class Study extends BaseEntity {
     private Patient patient;
 
     @Column(nullable = false)
+    @NotEmpty
     private String description;
 
     @Column(nullable = false)
@@ -50,6 +53,7 @@ public class Study extends BaseEntity {
 
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @NotNull(message = "startTime cannot be null")
     private LocalDateTime startTime;
 
     @Column

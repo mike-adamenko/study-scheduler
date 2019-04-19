@@ -46,7 +46,9 @@
         </tr>
         </thead>
         <tr th:each="study : ${patient.studies}">
-            <td th:text="${study.description}"></td>
+            <td>
+                <a th:href="@{/study/__${study.id}__/edit}" th:text="${study.description}"/></a>
+            </td>
             <td th:text="${study.doctor}"></td>
             <td th:text="${study.room}"></td>
             <td th:text="${#temporals.format(study.startTime, 'yyyy-MM-dd HH:mm')}"></td>
