@@ -15,10 +15,7 @@
  */
 package com.caresyntax.studyscheduler.web.controller;
 
-import com.caresyntax.studyscheduler.dao.DoctorRepository;
-import com.caresyntax.studyscheduler.dao.PatientRepository;
-import com.caresyntax.studyscheduler.dao.RoomRepository;
-import com.caresyntax.studyscheduler.dao.StudyRepository;
+import com.caresyntax.studyscheduler.dao.*;
 import com.caresyntax.studyscheduler.model.Doctor;
 import com.caresyntax.studyscheduler.model.Patient;
 import com.caresyntax.studyscheduler.model.Room;
@@ -101,14 +98,10 @@ class StudyController {
         } else {
             Patient patient = patientRepository.findById(patientId).get();
             study.setPatient(patient);
-            eligibilityCheck(study);
+            if (studyRepository.isExistIntersectingStudies(study)) return "study/createOrUpdateStudyForm";
             this.studyRepository.save(study);
             return "redirect:/patient/{patientId}";
         }
-    }
-
-    private void eligibilityCheck(@Valid Study study) {
-
     }
 
     @PostMapping("/patient/{patientId}/study/{studyId}/edit")

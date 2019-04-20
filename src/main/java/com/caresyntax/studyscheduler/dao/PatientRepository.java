@@ -40,7 +40,7 @@ public interface PatientRepository extends JpaRepository<Patient, Integer> {
      * @return a Collection of matching {@link Patient}s (or an empty Collection if none
      * found)
      */
-    @Query("SELECT DISTINCT patient FROM Patient patient WHERE lower(patient.name) LIKE lower('%' || :name || '%')")
+    @Query("SELECT patient FROM Patient patient WHERE lower(patient.name) LIKE lower('%' || :name || '%')")
     @Transactional(readOnly = true)
     Collection<Patient> findByName(@Param("name") String name);
 
