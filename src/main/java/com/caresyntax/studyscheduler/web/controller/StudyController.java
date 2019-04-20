@@ -91,14 +91,15 @@ class StudyController {
 
     @PostMapping("/patient/{patientId}/study/new")
     public String updateNewStudyForm(@PathVariable("patientId") int patientId, @Valid Study study, BindingResult result) {
-
-
         if (result.hasErrors()) {
             return "study/createOrUpdateStudyForm";
         } else {
             Patient patient = patientRepository.findById(patientId).get();
             study.setPatient(patient);
-            if (studyRepository.isExistIntersectingStudies(study)) return "study/createOrUpdateStudyForm";
+            if (studyRepository.isExistIntersectingStudies(study)) {
+                result.rejectValue("startTime", "error.intersect");
+                return "study/createOrUpdateStudyForm";
+            }
             this.studyRepository.save(study);
             return "redirect:/patient/{patientId}";
         }
