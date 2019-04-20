@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'studies')}">
+
+  <body>
+
+    <h2>Studies</h2>
+
+    <table class="table table-striped">
+
+        <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Description</th>
+            <th>Doctor</th>
+            <th>Room</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tr th:each="study : ${studyList}">
+            <td> <a th:href="@{/patient/__${study.patient.id}__/study/__${study.id}__/edit?source=studyList}" th:text="${study.patient.name}"/></a></td>
+            <td th:text="${study.description}"></td>
+            <td th:text="${study.doctor}"></td>
+            <td th:text="${study.room}"></td>
+            <td th:text="${#temporals.format(study.startTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(study.endTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${study.status.name}"></td>
+
+        </tr>
+    </table>
+
+  </body>
+</html>

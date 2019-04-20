@@ -1,12 +1,16 @@
 <html xmlns:th="https://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: layout (~{::body},'study')}">
+      th:replace="~{fragments/layout :: layout (~{::body},'patients')}">
 
 <body>
-
-<h2>Schedule</h2>
+<h2>
+    <th:block th:if="${study['new']}">New</th:block>
+    Study
+</h2>
 <div th:replace="~{study/createOrUpdateStudyJs}"></div>
-<form th:object="${study}" class="form-horizontal" id="add-study-form" method="post">
+<form th:object="${study}" class="form-horizontal" method="post">
+    <input type="hidden" name="id" th:value="*{id}"/>
     <div class="form-group has-feedback">
+
         <input
                 th:replace="~{fragments/inputField :: input ('Description', 'description', 'text')}"/>
         <input
@@ -18,6 +22,8 @@
                 th:replace="~{fragments/inputField :: input ('Start time', 'startTime', 'time')}"/>
         <input
                 th:replace="~{fragments/inputField :: input ('End time', 'endTime', 'time')}"/>
+        <input
+                th:replace="~{fragments/selectEnum :: select ('Status', 'status', ${studyStatuses})}"/>
 
     </div>
     <div class="form-group">

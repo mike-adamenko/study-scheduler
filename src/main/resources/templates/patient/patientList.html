@@ -19,7 +19,7 @@
               <td>
                   <a th:href="@{/patient/__${patient.id}__}" th:text="${patient.name}"/></a>
               </td>
-              <td th:text="${patient.sex}"/>
+              <td th:text="${patient.sex.name}"/>
               <td th:text="${patient.birthDate}"/>
           </tr>
         </tbody>

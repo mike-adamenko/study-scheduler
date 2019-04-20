@@ -16,7 +16,7 @@
       </tr>
       <tr>
         <th>Sex</th>
-        <td th:text="*{sex}" /></td>
+        <td th:text="*{sex.name}" /></td>
       </tr>
       <tr>
         <th>Birth Date</th>
@@ -26,7 +26,7 @@
   
     <a th:href="@{{id}/edit(id=${patient.id})}" class="btn btn-default">Edit
       Patient</a>
-    <a th:href="@{{id}/study/new(id=${patient.id})}" class="btn btn-default">Add
+    <a th:href="@{/patient/__${patient.id}__/study/new}" class="btn btn-default">Add
       study</a>
   
     <br />
@@ -43,16 +43,18 @@
             <th>Room</th>
             <th>Start Time</th>
             <th>End Time</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tr th:each="study : ${patient.studies}">
             <td>
-                <a th:href="@{/study/__${study.id}__/edit}" th:text="${study.description}"/></a>
+                <a th:href="@{/patient/__${patient.id}__/study/__${study.id}__/edit}" th:text="${study.description}"/></a>
             </td>
             <td th:text="${study.doctor}"></td>
             <td th:text="${study.room}"></td>
             <td th:text="${#temporals.format(study.startTime, 'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${#temporals.format(study.endTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${study.status.name}"></td>
 
         </tr>
     </table>

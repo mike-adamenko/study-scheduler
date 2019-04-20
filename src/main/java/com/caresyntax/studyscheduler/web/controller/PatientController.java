@@ -57,14 +57,14 @@ class PatientController {
     }
 
     @GetMapping("/patient/new")
-    public String initCreationForm(Map<String, Object> model) {
+    public String getNewPatientForm(Map<String, Object> model) {
         Patient patient = new Patient();
         model.put("patient", patient);
         return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/patient/new")
-    public String processCreationForm(@Valid Patient patient, BindingResult result) {
+    public String updateNewPatientForm(@Valid Patient patient, BindingResult result) {
         if (result.hasErrors()) {
             return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
@@ -80,7 +80,7 @@ class PatientController {
     }
 
     @GetMapping("/patient")
-    public String processFindForm(Patient patient, BindingResult result, Map<String, Object> model) {
+    public String searchPatient(Patient patient, BindingResult result, Map<String, Object> model) {
 
         // allow parameterless GET request for /patient to return all records
         if (patient.getName() == null) {
@@ -105,14 +105,14 @@ class PatientController {
     }
 
     @GetMapping("/patient/{patientId}/edit")
-    public String initUpdatePatientForm(@PathVariable("patientId") int patientId, Model model) {
+    public String getPatientForm(@PathVariable("patientId") int patientId, Model model) {
         Patient patient = this.patientRepository.findById(patientId).get();
         model.addAttribute(patient);
         return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/patient/{patientId}/edit")
-    public String processUpdatePatientForm(@Valid Patient patient, BindingResult result, @PathVariable("patientId") int patientId) {
+    public String updatePatientForm(@Valid Patient patient, BindingResult result, @PathVariable("patientId") int patientId) {
         if (result.hasErrors()) {
             return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
         } else {
@@ -129,10 +129,9 @@ class PatientController {
      * @return a ModelMap with the model attributes for the view
      */
     @GetMapping("/patient/{patientId}")
-    public ModelAndView showPatient(@PathVariable("patientId") int patientId) {
-        ModelAndView mav = new ModelAndView("patient/patientDetails");
-        mav.addObject(this.patientRepository.findById(patientId).get());
-        return mav;
+    public String showPatient(@PathVariable("patientId") int patientId, Model model) {
+        model.addAttribute(this.patientRepository.findById(patientId).get());
+        return "patient/patientDetails";
     }
 
 }

@@ -24,7 +24,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -37,7 +36,16 @@ import java.time.LocalDateTime;
 public class Study extends BaseEntity {
 
     public enum STATUS {
-        planned, inprogress, finished
+        planned("Planned"), inprogress("In progress"), finished("Finished");
+
+        String name;
+        STATUS(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
     @ManyToOne

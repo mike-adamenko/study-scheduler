@@ -36,7 +36,16 @@ import java.util.List;
 public class Patient extends NamedEntity {
 
     public enum SEX {
-        unknown, male, female
+        unknown("Unknown"), male("Male"), female("Female");
+
+        String name;
+        SEX(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
     @Column
     private SEX sex;

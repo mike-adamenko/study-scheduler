@@ -1,0 +1,21 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+  <form>
+    <th:block th:fragment="select (label, name, items)">
+      <div th:class="${'form-group'}"
+        class="form-group">
+        <label class="col-sm-2 control-label" th:text="${label}"></label>
+
+        <div class="col-sm-10">
+          <select th:field="*{__${name}__}">
+            <option th:each="item : ${items}" th:value="${item}"
+              th:text="${item.name}"></option>
+          </select>
+          <span class="glyphicon glyphicon-ok form-control-feedback"
+            aria-hidden="true"></span>
+        </div>
+      </div>
+    </th:block>
+  </form>
+</body>
+</html>

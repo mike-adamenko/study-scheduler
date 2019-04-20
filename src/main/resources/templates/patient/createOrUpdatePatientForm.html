@@ -8,21 +8,8 @@
     <div class="form-group has-feedback">
         <input
                 th:replace="~{fragments/inputField :: input ('Name', 'name', 'text')}"/>
-
-        <div th:class="${'form-group'}"
-             class="form-group">
-            <label class="col-sm-2 control-label">Sex</label>
-            <div class="col-sm-10">
-                <select th:field="*{sex}" >
-                    <option th:each="sex : ${sexes}" th:value="${sex}"
-                            th:text="${sex}">
-                    </option>
-                </select>
-                <span class="glyphicon glyphicon-ok form-control-feedback"
-                      aria-hidden="true"></span>
-            </div>
-        </div>
-
+        <input
+                th:replace="~{fragments/selectEnum :: select ('Sex', 'sex', ${sexes})}"/>
         <input
                 th:replace="~{fragments/inputField :: input ('Birth Date', 'birthDate', 'date')}"/>
     </div>
