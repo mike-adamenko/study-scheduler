@@ -8,7 +8,7 @@ StudyScheduler is a [Spring Boot](https://spring.io/guides/gs/spring-boot) appli
 git clone https://github.com/mike-adamenko/study-scheduler.git
 cd study-scheduler
 ./mvnw package
-java -jar target/*.jar
+java -jar target/study-scheduler-0.0.1-SNAPSHOT.jar
 ```
 
 You can then access StudyScheduler here: http://localhost:8080/
