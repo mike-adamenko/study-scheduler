@@ -32,9 +32,11 @@ public class Patient extends NamedEntity {
 
     @Column
     private SEX sex;
+
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", fetch = FetchType.EAGER)
     private List<Study> studies;
 

@@ -32,23 +32,29 @@ import java.time.LocalDateTime;
 public class Study extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
     @Column(nullable = false)
     @NotEmpty
     private String description;
+
     @Column(nullable = false)
     private STATUS status;
+
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @NotNull(message = "startTime cannot be null")
+    @NotNull
     private LocalDateTime startTime;
+
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
+
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
