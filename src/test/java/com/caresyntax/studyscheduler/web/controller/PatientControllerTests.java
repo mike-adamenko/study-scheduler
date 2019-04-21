@@ -132,7 +132,7 @@ public class PatientControllerTests {
         )
             .andExpect(status().isOk())
             .andExpect(model().attributeHasFieldErrors("patient", "name"))
-            .andExpect(model().attributeHasFieldErrorCode("patient", "name", "notFound"))
+            .andExpect(model().attributeHasFieldErrorCode("patient", "name", "error.notFound"))
             .andExpect(view().name("patient/findPatients"));
     }
 

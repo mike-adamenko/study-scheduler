@@ -88,7 +88,7 @@ class PatientController {
         Collection<Patient> results = patientRepository.findByName(patient.getName());
         if (results.isEmpty()) {
             // no patient found
-            result.rejectValue("name", "notFound", "not found");
+            result.rejectValue("name", "error.notFound", "not found");
             return "patient/findPatients";
         } else if (results.size() == 1) {
             // 1 patient found
