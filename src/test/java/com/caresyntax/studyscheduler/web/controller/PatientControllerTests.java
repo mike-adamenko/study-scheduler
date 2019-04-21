@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import java.util.Optional;
 /**
  * Test class for {@link PatientController}
  *
- * @author Colin But
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(PatientController.class)
@@ -65,7 +65,7 @@ public class PatientControllerTests {
         george.setId(TEST_PATIENT_ID);
         george.setName("George");
         george.setSex(Patient.SEX.male);
-        george.setBirthDate(LocalDate.of(2015, 12, 23));
+        george.setBirthDate(LocalDate.of(2015, 12, 01));
         given(this.patientRepository.findById(TEST_PATIENT_ID)).willReturn(Optional.of(george));
     }
 
@@ -74,7 +74,7 @@ public class PatientControllerTests {
         mockMvc.perform(get("/patient/new"))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("patient"))
-            .andExpect(view().name(PatientController.VIEWS_PATIENT_CREATE_OR_UPDATE_FORM));
+            .andExpect(view().name(PatientController.CREATE_OR_UPDATE_PATIENT_FORM));
     }
 
     @Test
@@ -142,49 +142,42 @@ public class PatientControllerTests {
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("patient"))
             .andExpect(model().attribute("patient", hasProperty("name", is("George"))))
-            .andExpect(model().attribute("patient", hasProperty("sex", is("male"))))
-            .andExpect(model().attribute("patient", hasProperty("birthDate", is("Madison"))))
-            .andExpect(model().attribute("patient", hasProperty("telephone", is("6085551023"))))
-            .andExpect(view().name("patientRepository/createOrUpdatePatientForm"));
+            .andExpect(model().attribute("patient", hasProperty("sex", is(Patient.SEX.male))))
+            .andExpect(model().attribute("patient", hasProperty("birthDate", is(LocalDate.of(2015, 12, 01)))))
+            .andExpect(view().name("patient/createOrUpdatePatientForm"));
     }
 
     @Test
-    public void testProcessUpdatePatientFormSuccess() throws Exception {
-        mockMvc.perform(post("/patientRepository/{patientId}/edit", TEST_PATIENT_ID)
-            .param("firstName", "Joe")
-            .param("lastName", "Bloggs")
-            .param("address", "123 Caramel Street")
-            .param("city", "London")
-            .param("telephone", "01616291589")
+    public void testUpdatePatientFormSuccess() throws Exception {
+        mockMvc.perform(post("/patient/{patientId}/edit", TEST_PATIENT_ID)
+            .param("name", "Joe")
+            .param("sex", "male")
+            .param("birthDate", "2015-10-02")
         )
             .andExpect(status().is3xxRedirection())
-            .andExpect(view().name("redirect:/patientRepository/{patientId}"));
+            .andExpect(view().name("redirect:/patient/{patientId}"));
     }
 
     @Test
-    public void testProcessUpdatePatientFormHasErrors() throws Exception {
-        mockMvc.perform(post("/patientRepository/{patientId}/edit", TEST_PATIENT_ID)
-            .param("firstName", "Joe")
-            .param("lastName", "Bloggs")
-            .param("city", "London")
+    public void testUpdatePatientFormHasErrors() throws Exception {
+        mockMvc.perform(post("/patient/{patientId}/edit", TEST_PATIENT_ID)
+            .param("sex", "male")
+            .param("birthDate", "2015-10-02")
         )
             .andExpect(status().isOk())
             .andExpect(model().attributeHasErrors("patient"))
-            .andExpect(model().attributeHasFieldErrors("patient", "address"))
-            .andExpect(model().attributeHasFieldErrors("patient", "telephone"))
-            .andExpect(view().name("patientRepository/createOrUpdatePatientForm"));
+            .andExpect(model().attributeHasFieldErrors("patient", "name"))
+            .andExpect(view().name("patient/createOrUpdatePatientForm"));
     }
 
     @Test
     public void testShowPatient() throws Exception {
-        mockMvc.perform(get("/patientRepository/{patientId}", TEST_PATIENT_ID))
+        mockMvc.perform(get("/patient/{patientId}", TEST_PATIENT_ID))
             .andExpect(status().isOk())
-            .andExpect(model().attribute("patient", hasProperty("lastName", is("Franklin"))))
-            .andExpect(model().attribute("patient", hasProperty("firstName", is("George"))))
-            .andExpect(model().attribute("patient", hasProperty("address", is("110 W. Liberty St."))))
-            .andExpect(model().attribute("patient", hasProperty("city", is("Madison"))))
-            .andExpect(model().attribute("patient", hasProperty("telephone", is("6085551023"))))
-            .andExpect(view().name("patientRepository/ownerDetails"));
+            .andExpect(model().attribute("patient", hasProperty("name", is("George"))))
+            .andExpect(model().attribute("patient", hasProperty("sex", is(Patient.SEX.male))))
+            .andExpect(model().attribute("patient", hasProperty("birthDate", is(LocalDate.of(2015, 12, 01)))))
+            .andExpect(view().name("patient/patientDetails"));
     }
 
 }

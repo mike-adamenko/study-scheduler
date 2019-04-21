@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,29 @@
  */
 package com.caresyntax.studyscheduler.dao;
 
-import java.util.Collection;
-
 import com.caresyntax.studyscheduler.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+
 /**
- * Repository class for <code>Patient</code> domain objects All method names are compliant with Spring Data naming
+ * Repository class for <code>Patient</code> domain objects
+ * <p>
+ * All method names are compliant with Spring Data naming
  * conventions so this interface can easily be extended for Spring Data.
  * See: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
  *
- * @author Mihail Adamenko
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 public interface PatientRepository extends JpaRepository<Patient, Integer> {
 
     /**
-     * Retrieve {@link Patient}s from the data store by last name, returning all patients
-     * whose last name <i>starts</i> with the given name.
+     * Retrieve {@link Patient}s from the data store by name, returning all patients
+     * whose name <i>contains</i> the given substring.
+     *
      * @param name Value to search for
      * @return a Collection of matching {@link Patient}s (or an empty Collection if none
      * found)

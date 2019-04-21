@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,21 @@
 package com.caresyntax.studyscheduler.dao;
 
 import com.caresyntax.studyscheduler.model.Study;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
 /**
- * Repository class for <code>Study</code> domain objects All method names are compliant with Spring Data naming
+ * Repository class for <code>Study</code> domain objects
+ * <p>
+ * All method names are compliant with Spring Data naming
  * conventions so this interface can easily be extended for Spring Data.
  * See: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
  *
- * @author Mihail Adamenko
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 public interface StudyRepository extends JpaRepository<Study, Integer>, StudyRepositoryCustom {
 
-   List<Study> findByPatientId(Integer patientId);
+    List<Study> findByPatientId(Integer patientId);
 
 }

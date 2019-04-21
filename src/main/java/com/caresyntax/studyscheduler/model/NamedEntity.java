@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,7 @@ import javax.validation.constraints.NotEmpty;
  * Simple JavaBean domain object adds a name property to <code>BaseEntity</code>. Used as a base class for objects
  * needing these properties.
  *
- * @author Ken Krebs
- * @author Juergen Hoeller
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {

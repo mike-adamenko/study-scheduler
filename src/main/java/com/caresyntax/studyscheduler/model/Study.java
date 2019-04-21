@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,7 @@ package com.caresyntax.studyscheduler.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -29,53 +25,33 @@ import java.time.LocalDateTime;
 /**
  * Simple JavaBean domain object representing a Study.
  *
- * @author Mihail Adamenko
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @Entity
 @Table
 public class Study extends BaseEntity {
 
-    public enum STATUS {
-        planned("Planned"), inprogress("In progress"), finished("Finished");
-
-        String name;
-        STATUS(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
-
     @Column(nullable = false)
     @NotEmpty
     private String description;
-
     @Column(nullable = false)
     private STATUS status;
-
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @NotNull(message = "startTime cannot be null")
     private LocalDateTime startTime;
-
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime;
-
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
-
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
-
 
     public Patient getPatient() {
         return patient;
@@ -144,5 +120,19 @@ public class Study extends BaseEntity {
             ", doctor=" + doctor +
             ", room=" + room +
             '}';
+    }
+
+    public enum STATUS {
+        planned("Planned"), inprogress("In progress"), finished("Finished");
+
+        String name;
+
+        STATUS(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

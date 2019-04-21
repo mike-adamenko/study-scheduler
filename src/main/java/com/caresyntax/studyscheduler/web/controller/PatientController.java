@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,27 @@
  */
 package com.caresyntax.studyscheduler.web.controller;
 
-import com.caresyntax.studyscheduler.model.Patient;
 import com.caresyntax.studyscheduler.dao.PatientRepository;
+import com.caresyntax.studyscheduler.model.Patient;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Map;
 
 /**
- * @author Mihail Adamenko
+ * Patient web controller
+ *
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @Controller
 class PatientController {
 
-    public static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patient/createOrUpdatePatientForm";
+    public static final String CREATE_OR_UPDATE_PATIENT_FORM = "patient/createOrUpdatePatientForm";
     private final PatientRepository patientRepository;
 
 
@@ -52,7 +49,7 @@ class PatientController {
     }
 
     @ModelAttribute("sexes")
-    public  Patient.SEX[] populateSexes() {
+    public Patient.SEX[] populateSexes() {
         return Patient.SEX.values();
     }
 
@@ -60,13 +57,13 @@ class PatientController {
     public String getNewPatientForm(Map<String, Object> model) {
         Patient patient = new Patient();
         model.put("patient", patient);
-        return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+        return CREATE_OR_UPDATE_PATIENT_FORM;
     }
 
     @PostMapping("/patient/new")
     public String updateNewPatientForm(@Valid Patient patient, BindingResult result) {
         if (result.hasErrors()) {
-            return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+            return CREATE_OR_UPDATE_PATIENT_FORM;
         } else {
             this.patientRepository.save(patient);
             return "redirect:/patient/" + patient.getId();
@@ -108,13 +105,13 @@ class PatientController {
     public String getPatientForm(@PathVariable("patientId") int patientId, Model model) {
         Patient patient = this.patientRepository.findById(patientId).get();
         model.addAttribute(patient);
-        return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+        return CREATE_OR_UPDATE_PATIENT_FORM;
     }
 
     @PostMapping("/patient/{patientId}/edit")
     public String updatePatientForm(@Valid Patient patient, BindingResult result, @PathVariable("patientId") int patientId) {
         if (result.hasErrors()) {
-            return VIEWS_PATIENT_CREATE_OR_UPDATE_FORM;
+            return CREATE_OR_UPDATE_PATIENT_FORM;
         } else {
             patient.setId(patientId);
             this.patientRepository.save(patient);

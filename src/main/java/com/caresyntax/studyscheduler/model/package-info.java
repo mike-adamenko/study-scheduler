@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 
 /**
- * The classes in this package represent utilities used by the domain.
+ * The classes in this package represent domain objects.
+ *
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 package com.caresyntax.studyscheduler.model;
 

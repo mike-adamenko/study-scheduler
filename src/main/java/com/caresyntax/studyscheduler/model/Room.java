@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,9 @@ package com.caresyntax.studyscheduler.model;
 import javax.persistence.Entity;
 
 /**
- * Simple JavaBean domain object representing a veterinarian.
+ * Simple JavaBean domain object representing a room.
  *
- * @author Ken Krebs
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @author Arjen Poutsma
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @Entity
 public class Room extends NamedEntity {

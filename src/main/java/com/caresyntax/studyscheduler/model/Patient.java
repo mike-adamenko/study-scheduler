@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,44 +17,24 @@ package com.caresyntax.studyscheduler.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Simple JavaBean domain object representing a Patient.
  *
- * @author Mihail Adamenko
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @Entity
 @Table
 public class Patient extends NamedEntity {
 
-    public enum SEX {
-        unknown("Unknown"), male("Male"), female("Female");
-
-        String name;
-        SEX(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
     @Column
     private SEX sex;
-
-
     @Column
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthDate;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", fetch = FetchType.EAGER)
     private List<Study> studies;
 
@@ -88,5 +68,19 @@ public class Patient extends NamedEntity {
             "sex=" + sex +
             ", birthDate=" + birthDate +
             '}';
+    }
+
+    public enum SEX {
+        unknown("Unknown"), male("Male"), female("Female");
+
+        String name;
+
+        SEX(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

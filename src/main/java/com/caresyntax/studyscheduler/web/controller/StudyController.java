@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2019-present Mike Adamenko (mnadamenko@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,10 @@
  */
 package com.caresyntax.studyscheduler.web.controller;
 
-import com.caresyntax.studyscheduler.dao.*;
+import com.caresyntax.studyscheduler.dao.DoctorRepository;
+import com.caresyntax.studyscheduler.dao.PatientRepository;
+import com.caresyntax.studyscheduler.dao.RoomRepository;
+import com.caresyntax.studyscheduler.dao.StudyRepository;
 import com.caresyntax.studyscheduler.model.Doctor;
 import com.caresyntax.studyscheduler.model.Patient;
 import com.caresyntax.studyscheduler.model.Room;
@@ -33,11 +36,14 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author Mihail Adamenko
+ * Study web controller
+ *
+ * @author Mike Adamenko (mnadamenko@gmail.com)
  */
 @Controller
 class StudyController {
 
+    public static final String CREATE_OR_UPDATE_STUDY_FORM = "study/createOrUpdateStudyForm";
     private final PatientRepository patientRepository;
     private final StudyRepository studyRepository;
     private final RoomRepository roomRepository;
@@ -67,7 +73,7 @@ class StudyController {
     }
 
     @GetMapping("/studies")
-    public String initStudyListForm(Model model) {
+    public String getStudyListForm(Model model) {
         List<Study> studyList = this.studyRepository.findAll();
         model.addAttribute(studyList);
         return "study/studyList";
@@ -77,7 +83,7 @@ class StudyController {
     public String getNewStudyForm(Model model) {
         Study study = new Study();
         model.addAttribute(study);
-        return "study/createOrUpdateStudyForm";
+        return CREATE_OR_UPDATE_STUDY_FORM;
     }
 
     @GetMapping("/patient/{patientId}/study/{studyId}/edit")
@@ -86,23 +92,28 @@ class StudyController {
         model.addAttribute(study);
         if (source != null)
             model.addAttribute(source);
-        return "study/createOrUpdateStudyForm";
+        return CREATE_OR_UPDATE_STUDY_FORM;
     }
 
     @PostMapping("/patient/{patientId}/study/new")
     public String updateNewStudyForm(@PathVariable("patientId") int patientId, @Valid Study study, BindingResult result) {
         if (result.hasErrors()) {
-            return "study/createOrUpdateStudyForm";
+            return CREATE_OR_UPDATE_STUDY_FORM;
         } else {
             Patient patient = patientRepository.findById(patientId).get();
             study.setPatient(patient);
-            if (studyRepository.isExistIntersectingStudies(study)) {
-                result.rejectValue("startTime", "error.intersect");
-                return "study/createOrUpdateStudyForm";
-            }
+            if (isIntersect(study, result)) return CREATE_OR_UPDATE_STUDY_FORM;
             this.studyRepository.save(study);
             return "redirect:/patient/{patientId}";
         }
+    }
+
+    private boolean isIntersect(@Valid Study study, BindingResult result) {
+        if (studyRepository.isExistIntersectingStudies(study)) {
+            result.rejectValue("startTime", "error.intersect");
+            return true;
+        }
+        return false;
     }
 
     @PostMapping("/patient/{patientId}/study/{studyId}/edit")
@@ -112,8 +123,9 @@ class StudyController {
 
         if (result.hasErrors()) {
             model.addAttribute(study);
-            return "study/createOrUpdateStudyForm";
+            return CREATE_OR_UPDATE_STUDY_FORM;
         } else {
+            if (isIntersect(study, result)) return CREATE_OR_UPDATE_STUDY_FORM;
 
             this.studyRepository.save(study);
             if ("studyList".equals(source)) return "redirect:/studies";
