@@ -45,12 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * is no need for a teardown or cleanup script. <li> An {@link org.springframework.context.ApplicationContext
  * ApplicationContext} is also inherited and can be used for explicit bean lookup if necessary. </li> </ul>
  *
- * @author Ken Krebs
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @author Michael Isvy
- * @author Dave Syer
+ * @author M
  */
 
 @RunWith(SpringRunner.class)
@@ -58,47 +53,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StudySchedulerServiceTests {
 
     @Autowired
-    protected PatientRepository patients;
+    protected PatientRepository patientRepository;
 
 
     @Test
     public void shouldFindPatientsByName() {
-        Collection<Patient> patients = this.patients.findByName("George Franklin");
+        Collection<Patient> patients = this.patientRepository.findByName("George Franklin");
         assertThat(patients.size()).isEqualTo(1);
 
-        patients = this.patients.findByName("Daviss");
+        patients = this.patientRepository.findByName("Daviss");
         assertThat(patients.isEmpty()).isTrue();
     }
 
     @Test
     @Transactional
     public void shouldInsertPatient() {
-        Collection<Patient> patients = this.patients.findByName("Schultz");
+        Collection<Patient> patients = this.patientRepository.findByName("Schultz");
         int found = patients.size();
 
         Patient patient = new Patient();
-        patient.setName("Sam");
+        patient.setName("Schultz");
         patient.setSex(Patient.SEX.male);
         patient.setBirthDate(LocalDate.now());
-        this.patients.save(patient);
-        assertThat(patient.getId().longValue()).isNotEqualTo(0);
+        this.patientRepository.save(patient);
+        assertThat(patient.isNew()).isFalse();
 
-        patients = this.patients.findByName("Schultz");
+        patients = this.patientRepository.findByName("Schultz");
         assertThat(patients.size()).isEqualTo(found + 1);
     }
 
     @Test
     @Transactional
     public void shouldUpdatePatient() {
-        Patient patient = this.patients.findById(1).get();
+        Patient patient = this.patientRepository.findById(1).get();
         String oldName = patient.getName();
         String newName = oldName + "X";
 
         patient.setName(newName);
-        this.patients.save(patient);
+        this.patientRepository.save(patient);
 
         // retrieving new name from database
-        patient = this.patients.findById(1).get();
+        patient = this.patientRepository.findById(1).get();
         assertThat(patient.getName()).isEqualTo(newName);
     }
 

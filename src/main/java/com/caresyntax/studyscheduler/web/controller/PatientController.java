@@ -38,7 +38,7 @@ import java.util.Map;
 @Controller
 class PatientController {
 
-    private static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patient/createOrUpdatePatientForm";
+    public static final String VIEWS_PATIENT_CREATE_OR_UPDATE_FORM = "patient/createOrUpdatePatientForm";
     private final PatientRepository patientRepository;
 
 
